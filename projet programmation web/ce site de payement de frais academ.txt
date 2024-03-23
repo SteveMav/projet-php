@@ -1,0 +1,49 @@
+ce site de payement de frais academique, et enregistrement en vu d'une carte d'etudiant:
+donc le site doit : 
+
+1.enregistrer les étudiant en vu de l'utilisation des fonctionalité.
+2.une fois dans son compte l'etudiant doit pouvoir doit pouvoir choisir ce qu'il doit faire:
+	dans la nav bar:
+		
+			-payement frais scolaire
+				premiere tranche
+				deuxiement tranche
+				troisieme tranche
+				totalité des frais
+			-payement de l'enrolement
+				enrolement premier semestre
+				enrolement deuxieme
+				totalité
+			-carte etudiant
+				enregistrement des infos 
+				complement des infos restant si besoin
+				vu du design de la carte 
+				enregistrement an vu du payement de la carte	
+
+
+
+
+				base de donnée:  			
+				eleve:						payement:	
+				
+				matricule					id_payement
+		        id_etudiant                 id_etudiant 	
+				nom							date
+				post_nom					tranche
+				prenom						
+				faculté
+				licence
+				photo_passeport	
+				adresse
+				email
+
+				cartes_etudiant:           enrolement:
+				id_cartes					id_enrolement
+				id_etudiant					id_etudiant
+				nom							date
+			    prenom						tranche
+				photo_passeport				totalité
+				date_delivrance
+				
+				
+				
