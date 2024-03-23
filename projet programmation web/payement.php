@@ -24,7 +24,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="accueil">Accueil</a>
+                        <a class="nav-link" href="accueil">doras</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="accueil">frais académiques</a>
