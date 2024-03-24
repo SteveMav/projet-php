@@ -18,23 +18,31 @@
                     <form action="traitement_inscription.php" method="post">
                         <div class="form-group">
                             <label for="username">nom</label>
-                            <input type="text" id="nom" name="nom" class="form-control">
+                            <input type="text" id="nom" name="nom" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="post_nom">post nom</label>
-                            <input type="text" id="" name="post_nom" class="form-control">
+                            <input type="text" id="" name="post_nom" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="prenom">prenom</label>
-                            <input type="text" id="" name="prenom" class="form-control">
+                            <input type="text" id="" name="prenom" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="">matricule</label>
-                            <input type="number" id="" name="matricule" class="form-control">
+                            <input type="number" id="" name="matricule" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="">email</label>
-                            <input type="text" id="" name="email" class="form-control">
+                            <input type="text" id="" name="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                             <label for="">faculté</label>
+                            <input type="text" id="" name="faculte" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                             <label for="">licence</label>
+                            <input type="text" id="" name="licence" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="">mot de passe</label>
