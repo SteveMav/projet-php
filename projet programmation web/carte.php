@@ -6,28 +6,29 @@
     <title>Université américaine de Kinshasa</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="bootstrap.min.css">
-    <link rel="stylesheet" href="payement.css">
+    <link rel="stylesheet" href="accueil.css">
     <!-- Custom CSS -->
     <style>
        
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <img src="./images/Logo.png" alt="auk" width="60">
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
+                    <li class="nav-item a">
                         <a class="nav-link" href="accueil.php">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="accueil.php">frais académiques</a>
+                        <a class="nav-link" href="payement.php">frais académiques</a>
                     </li>
                     
                     <li class="nav-item dropdown">
@@ -40,10 +41,10 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="carte.php">Carte d'étudiant</a>
+                        <a class="nav-link " href="carte.php">Carte d'étudiant</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
+                        <a class="nav-link btn btn-login btn-block bg-primary" href="connexion.php">déconnexion</a>²
                     </li>
                 </ul>
             </div>

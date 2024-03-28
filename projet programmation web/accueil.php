@@ -41,10 +41,10 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="carte.php">Carte d'étudiant</a>
+                        <a class="nav-link " href="carte.php">Carte d'étudiant</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
+                        <a class="nav-link btn btn-login btn-block bg-primary" href="connexion.php">déconnexion</a>²
                     </li>
                 </ul>
             </div>
