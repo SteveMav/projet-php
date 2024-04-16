@@ -1,0 +1,56 @@
+body {
+    background-color: #f8f9fa;
+}
+.navbar {
+    background-color: #0f162e;
+}
+
+.navbar-brand {
+    color: #ffffff;
+    font-weight: bold;
+}
+.navbar-nav .nav-link {
+    color: #ffffff;
+}
+
+.student-card {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.student-avatar {
+    border-radius: 5px 5px 0 0;
+    background-color:  #0f162e31; /* Rouge */
+    color: #ffffff;
+    text-align: center;
+    padding: 10px;
+}
+
+.student-name {
+    font-weight: bold;
+    color: #0000ff; /* Bleu */
+}
+
+.student-id {
+    color: #ffffff;
+    background-color: #ffffff; /* Blanc */
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.student-info {
+    margin-top: 20px;
+}
+footer {
+position: absolute;
+bottom: 0;
+width: 100%;
+}
+@media screen and (max-width: 767px) {
+    footer {
+        position: static;
+    }
+}
