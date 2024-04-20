@@ -1,7 +1,24 @@
 <?php
+include("connexion_base.php");
 session_start();
 if(!($_SESSION['id_etudiant'])){
     header("location: index.php");
+}
+if(isset($_POST['statut_payement'])){
+    $tranche = $_POST['tranche'];
+    $id_etudiant = $_SESSION['id_etudiant'];
+    $sql = "SELECT * FROM frais_academique WHERE id_etudiant = '$id_etudiant' AND tranche = '$tranche'";
+    $data = $dbh->query($sql);
+    $result = $data->fetch();
+    if($result){
+
+        $_SESSION['message_statut'] = "vous avez déjà payé pour cette tranche";
+        $color = "alert-success";
+    } else {
+        $_SESSION['message_statut'] = "Payement non effectué";
+        $color = "alert-danger";
+    }
+    header("location: payement.php");
 }
 
 ?>
@@ -59,308 +76,327 @@ if(!($_SESSION['id_etudiant'])){
         <h2 class="text-danger text-center mt-4">ici le payement de vos frais académiques</h2>
     </div>
     
-    <div class="container mt-5">
-      <!-- affichage du message de confirmation première tranche -->
-      <?php
-    if (!empty($_SESSION['message_première'])) {
-      $color = '';
+    <div class="container light-style flex-grow-1 container-p-y">
+        <h2 class="font-weight-bold py-3 mb-4 text-primary">
+            le payement de vos frais
 
-      if ( $_SESSION['message_première'] == 'Paiement effectué avec succès!') {
-      $color = 'text-success';
-      } elseif ($_SESSION['message_première'] == 'Vous avez déjà payé la première tranche!') {
-      $color = 'text-primary';
-      } elseif ($_SESSION['message_première'] == 'Erreur lors du paiement') {
-      $color = 'text-danger';
-      }
-      ?>
-
-      <h5 class="text-center <?php echo $color; ?> alert"><?php echo $_SESSION['message_première']; ?></h5>
-
-    <?php } ?>
-      
-      <div class="container mt-2 w-400 border rounded-4 border-3 border-dark bg-primary text-white" style="width: 50%; height: 100px;">
-      
-        <button class="btn btn-primary" data-toggle="modal" data-target="#premiereTrancheModal">Première tranche</button>
-      </div>
-            <!-- affichage du message de confirmation deuxième tranche -->
-      <?php
-    if (!empty($_SESSION['message_deuxième'])) {
-      $color = '';
-
-      if ($_SESSION['message_deuxième'] == 'Paiement effectué avec succès!') {
-      $color = 'text-success';
-      } elseif ($_SESSION['message_deuxième'] == 'Vous avez déjà payé la deuxième tranche!') {
-      $color = 'text-primary';
-      } elseif ($_SESSION['message_deuxième'] == 'Erreur lors du paiement') {
-      $color = 'text-danger';
-      }
-      ?>
-      <h5 class="text-center <?php echo $color; ?> alert"><?php echo $_SESSION['message_deuxième'];?></h5>
-    <?php } ?>
-
-      <div class="container mt-2 w-400 border rounded-4 border-3 border-dark bg-primary text-white" style="width: 50%; height: 100px;">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#deuxiemeTrancheModal" >deuxième tranche</button>
-      </div>
-      <!-- affichage du message de confirmation troisième tranche-->
-      <?php
-    if (!empty($_SESSION['message_troisième'])) {
-      $color = '';
-
-      if ($_SESSION['message_troisième'] == 'Paiement effectué avec succès!') {
-      $color = 'text-success';
-      } elseif ($_SESSION['message_troisième'] == 'Vous avez déjà payé la troisième tranche!') {
-      $color = 'text-primary';
-      } elseif ($_SESSION['message_troisième'] == 'Erreur lors du paiement') {
-      $color = 'text-danger';
-      }
-      ?>
-      <h5 class="text-center <?php echo $color; ?> alert"><?php echo $_SESSION['message_troisième'];?></h5>
-    <?php } ?>
-      <div class="container mt-2 w-400 border rounded-4 border-3 border-dark bg-primary text-white" style="width: 50%; height: 100px;">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#troisiemeTrancheModal">troisième tranche</button>
-      </div>
-      <!-- affichage du message de confirmation enrolement -->
-      <?php
-    if (!empty($_SESSION['message_enrolement'])) {
-      $color = '';
-
-      if ($_SESSION['message_enrolement'] == 'Paiement effectué avec succès!') {
-      $color = 'text-success';
-      } elseif ($_SESSION['message_enrolement'] == 'Vous avez déjà payé pour l\'enrolement!') {
-      $color = 'text-primary';
-      } elseif ($_SESSION['message_enrolement'] == 'Erreur lors du paiement') {
-      $color = 'text-danger';
-      }
-      ?>
-      <h5 class="text-center <?php echo $color; ?> alert"><?php echo $_SESSION['message_enrolement'];?></h5>
-    <?php } ?>
-
-      <div class="container mt-2 w-400 border rounded-4 border-3 border-dark bg-primary text-white" style="width: 50%; height: 100px;">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#enrolementModal">enrolement</button>
-      </div>
-    </div>
-
-
-    <!-- boite de dialogue -->
-    <div class="modal fade" id="premiereTrancheModal" tabindex="-1" role="dialog" aria-labelledby="premiereTrancheModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="formulaireModalLabel">Formulaire de paiement - première tranche</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="col-md-12">
-        <form method="post" action="traitement_payement.php">
-          
-          <h5>Informations de paiement</h5>
-          <h6>payement par carte</h6>
-          </div>
-          <div id="cartePaiement">
-          <div class="form-group">
+        </h2>
+        <!-- menu à gauche -->
+        <div class="container">
+        <div class="row">
+  <div class="col-md-3 border">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link a" id="menu_click" href="#formulaire1">première tranche</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link a" id="menu_click" href="#formulaire2">deuxième tranche</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link a" id="menu_click" href="#formulaire3">troisième tranche</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link a" id="menu_click" href="#formulaire4">enrolement</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link a" id="menu" href="#formulaire5">statut payement</a>
+      </li>
+    </ul>
+    <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                      document.querySelector("footer").style.position = "fixed";
+                      document.querySelector("footer").style.bottom = "0";
+                      document.querySelector("footer").style.width = "100%";
+                    });
+                    document.getElementById("menu").addEventListener("click", function() {
+                        document.querySelector("footer").style.position = "fixed";
+                        document.querySelector("footer").style.bottom = "0";
+                        document.querySelector("footer").style.width = "100%";
+                    });
+                    var menuClickElements = document.querySelectorAll("#menu_click");
+                    menuClickElements.forEach(function(element) {
+                      element.addEventListener("click", function() {
+                        document.querySelector("footer").style.position = "relative";
+                      });
+                    });
+                  </script>
+  </div>
+  <div class="col-md-9">
+    <div id="formulaire1"> 
+      <!-- Formulaire 1 -->
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">Première tranche</h5>
+              </div>
+              <div class="card-body">
+                <p class="card-text">Le montant de la première tranche est de 320$</p>
+                <form action="traitement_payement.php" method="post">
+                <div class="form-group">
             <label for="nomCarte">Nom sur la carte :</label>
             <input type="text" class="form-control" id="nomCarte" name="nom_carte_payement">
           </div>
           <div class="form-group">
-            <label for="numeroCarte">Numéro de carte :</label>
-            <input type="number" class="form-control" id="numeroCarte" name="numero_carte" required>
+            <label for="nomCarte">numéro de la carte :</label>
+            <input type="number" class="form-control" id="nomCarte" name="numero_carte">
           </div>
-           <!-- date d'expiration de la carte -->
           <div class="form-group">
-          <label for="dateExpiration">Date d'expiration :</label>
-          <input type="date" class="form-control" id="dateExpiration" name="date_expiration" required>
+            <label for="nomCarte">date d'expiration :</label>
+            <input type="date" class="form-control" id="date_d'expiration" name="date_expiration" min="<?php echo date('Y-m-d'); ?>" required>
           </div>
-
           <div class="form-group">
-            <label for="codeSecurite">Code de sécurité :</label>
-            <input type="number" class="form-control" id="codeSecurite" name="code_securite" required>
+            <label for="nomCarte">code de sécurité :</label>
+            <input type="number" class="form-control" id="nomCarte" name="nom_carte_payement">
           </div>
+          <button type="submit" name="payer_premiere" class="btn p mt-3">payer</button>
+                </form>
+              </div>
+            </div>
           </div>
-          <button type="submit" name="payer_premiere" class="btn btn-primary mt-3" data-toggle="modal" data-target="#maBoiteDialogue">Payer</button>
-        </form>
+        </div>
+      </div>  
+    </div>
+    <div id="formulaire2"> 
+      <!-- Formulaire 2 -->
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">deuxième tranche</h5>
+              </div>
+              <div class="card-body">
+                <p class="card-text">le motant de la deuxième tranche est de 330$</p>
+                <form action="traitement_payement.php" method="post">
+                  <div class="form-group">
+                    <label for="nomCarte">Nom sur la carte :</label>
+                    <input type="text" class="form-control" id="nomCarte" name="nom_carte_payement">
+                  </div>
+                  <div class="form-group">
+                    <label for="numeroCarte">Numéro de carte :</label>
+                    <input type="number" class="form-control" id="numeroCarte" name="numero_carte" min="<?php echo date('Y-m-d');?>" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="exp">date d'expiration :</label>
+                    <input type="date" class="form-control" id="exp" name="date_expiration" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="codeSecurite">Code de sécurité :</label>
+                    <input type="number" class="form-control" id="codeSecurite" name="code_securite" required>
+                  </div>
+                  <button type="submit" class="btn p mt-3" name="payer_deuxieme">payer</button>
+                </form>
+              </div>
+            </div>
+          </div> 
+        </div>
+      </div> 
+    </div>
+    <div id="formulaire3"> 
+      <!-- Formulaire 3 -->
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">troisème tranche</h5>
+              </div>
+              <div class="card-body">
+                <p class="card-text">le montant de la troisième tranche est de 250$</p>
+                <form action="traitement_payement.php" method="post">
+                  <div class="form-group">
+                    <label for="nomCarte">Nom sur la carte :</label>
+                    <input type="text" class="form-control" id="nomCarte" name="nom_carte_payement">
+                  </div>
+                  <div class="form-group">
+                    <label for="numeroCarte">Numéro de carte :</label>
+                    <input type="number" class="form-control" id="numeroCarte" name="numero_carte" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="dateExpiration">Date d'expiration :</label>
+                    <input type="date" class="form-control" id="dateExpiration" name="date_expiration" min="<?php echo date('Y-m-d');?>" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="codeSecurite">Code de sécurité :</label>
+                    <input type="number" class="form-control" id="codeSecurite" name="code_securite" required>
+                  </div>
+                  <button type="submit" class="btn p mt-3" name="payer_troisieme">payer</button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      
-       
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-        <button type="button" name="enregistrement_carte" class="btn btn-primary">Enregistrer</button>
-      </div>
-      </div>
     </div>
-    </div>
-  </div>
-   
-
-  <div class="modal fade" id="deuxiemeTrancheModal" tabindex="-1" role="dialog" aria-labelledby="deuxiemeTrancheModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="formulaireModalLabel">Formulaire de paiement - deuxième tranche</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="col-md-12">
-        <form method="post" action="traitement_payement.php">
-          
-          <h5>Informations de paiement</h5>
-          <h6>payement par carte</h6>
+    <div id="formulaire4"> 
+      <!-- Formulaire 4 -->
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">enrolement</h5>
+              </div>
+              <div class="card-body">
+                <p class="card-text">le motant de l'enrolement est de 20$ pour chaque tranche</p>
+                <form action="traitement_payement.php" method="post">
+                  <div class="form-group">
+                    <label for="choix tranche">choix de la tranche</label>
+                    <select name="tranche_enrolement" id="tranche_enrolement" class="form-control">
+                      <option value="premiere">première</option>
+                      <option value="deuxieme">deuxième</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="nomCarte">Nom sur la carte :</label>
+                    <input type="text" class="form-control" id="nomCarte" name="nom_carte_payement">
+                  </div>
+                  <div class="form-group">
+                    <label for="numeroCarte">Numéro de carte :</label>
+                    <input type="number" class="form-control" id="numeroCarte" name="numero_carte" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="dateExpiration">Date d'expiration :</label>
+                    <input type="date" class="form-control" id="dateExpiration" name="date_expiration" min="<?php echo date('Y-m-d');?>" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="codeSecurite">Code de sécurité :</label>
+                    <input type="number" class="form-control" id="codeSecurite" name="code_securite" required>
+                  </div>
+                  <button type="submit" class="btn p mt-3" name="payer_enrolement">payer</button>
+                </form>
+              </div>
+            </div>
           </div>
-          <div id="cartePaiement">
-          <div class="form-group">
-            <label for="nomCarte">Nom sur la carte :</label>
-            <input type="text" class="form-control" id="nomCarte" name="nom_carte_payement">
-          </div>
-          <div class="form-group">
-            <label for="numeroCarte">Numéro de carte :</label>
-            <input type="number" class="form-control" id="numeroCarte" name="numero_carte" required>
-          </div>
-           <!-- date d'expiration de la carte -->
-          <div class="form-group">
-          <label for="dateExpiration">Date d'expiration :</label>
-          <input type="date" class="form-control" id="dateExpiration" name="date_expiration" required>
-          </div>
-
-          <div class="form-group">
-            <label for="codeSecurite">Code de sécurité :</label>
-            <input type="number" class="form-control" id="codeSecurite" name="code_securite" required>
-          </div>
-          </div>
-          <button type="submit" name="payer_deuxieme" class="btn btn-primary mt-3" data-toggle="modal" data-target="#maBoiteDialogue">Payer</button>
-        </form>
         </div>
       </div>
-      
-       
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-        <button type="button" name="enregistrement_carte" class="btn btn-primary">Enregistrer</button>
-      </div>
-      </div>
     </div>
-    </div>
-  </div>
-   
-
-  <div class="modal fade" id="troisiemeTrancheModal" tabindex="-1" role="dialog" aria-labelledby="troisiemeTrancheModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="formulaireModalLabel">Formulaire de paiement - troisième tranche</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="col-md-12">
-        <form method="post" action="traitement_payement.php">
-          
-          <h5>Informations de paiement</h5>
-          <h6>payement par carte</h6>
+    <div id="formulaire5"> 
+      <!-- Formulaire 5 -->
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">statut de payement de frais</h5>
+              </div>
+              <div class="card-body">
+                <p class="card-text">choisissez la tranche de payement dont vous voulez connaitre le statut</p>
+               
+                <!-- affichage du message de confirmation -->
+                <?php if(isset($_SESSION['message_statut']))
+                if($_SESSION['message_statut'] == "vous avez déjà payé pour cette tranche"){
+                    echo "<div class='alert alert-success'>".$_SESSION['message_statut']."</div>";
+                } else {
+                    echo "<div class='alert alert-danger'>".$_SESSION['message_statut']."</div>";
+                }
+                ?>
+                <form action="" method="post">
+                  <div class="form-group">
+                    <label for="choixTranche">choix de la tranche</label>
+                    <select name="tranche" id="tranche" class="form-control">
+                      <option value="premiere">première</option>
+                      <option value="deuxieme">deuxième</option>
+                      <option value="troisieme">troisième</option>
+                      <option value="enrolement_premiere">première tranche de l'enrolement</option>
+                      <option value="enrolement_deuxieme">deuxième tranche de l'enrolement</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn p mt-3" name="statut_payement">voir le statut</button>
+                </form>
+              </div>
+            </div>
           </div>
-          <div id="cartePaiement">
-          <div class="form-group">
-            <label for="nomCarte">Nom sur la carte :</label>
-            <input type="text" class="form-control" id="nomCarte" name="nom_carte_payement">
-          </div>
-          <div class="form-group">
-            <label for="numeroCarte">Numéro de carte :</label>
-            <input type="number" class="form-control" id="numeroCarte" name="numero_carte" required>
-          </div>
-           <!-- date d'expiration de la carte -->
-          <div class="form-group">
-          <label for="dateExpiration">Date d'expiration :</label>
-          <input type="date" class="form-control" id="dateExpiration" name="date_expiration" required>
-          </div>
-
-          <div class="form-group">
-            <label for="codeSecurite">Code de sécurité :</label>
-            <input type="number" class="form-control" id="codeSecurite" name="code_securite" required>
-          </div>
-          </div>
-          <button type="submit" name="payer_troisieme" class="btn btn-primary mt-3" data-toggle="modal" data-target="#maBoiteDialogue">Payer</button>
-        </form>
         </div>
       </div>
-      
-       
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-        <button type="button" name="enregistrement_carte" class="btn btn-primary">Enregistrer</button>
-      </div>
-      </div>
-    </div>
     </div>
   </div>
-   
+</div>
 
-  <div class="modal fade" id="enrolementModal" tabindex="-1" role="dialog" aria-labelledby="enrolementModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="formulaireModalLabel">Formulaire de paiement - l'enrolement est à 20$</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="col-md-12">
-        <form method="post" action="traitement_payement.php">
-          
-          <h5>Informations de paiement</h5>
-          <h6>payement par carte</h6>
-          </div>
-          <div id="cartePaiement">
-          <div>
-          <div class="form-group">
-            <label for="nomCarte">choix de la tranche de l'enrolement :</label>
-            <select class="form-control" id="nomCarte" name="tranche_enrolement">
-              <option value="premiere">Première tranche</option>
-              <option value="deuxieme">Deuxième tranche</option>
-            </select>
-          </div>  
-          <div class="form-group">
-            <label for="nomCarte">Nom sur la carte :</label>
-            <input type="text" class="form-control" id="nomCarte" name="nom_carte_payement">
-          </div>
-          <div class="form-group">
-            <label for="numeroCarte">Numéro de carte :</label>
-            <input type="number" class="form-control" id="numeroCarte" name="numero_carte" required>
-          </div>
-           <!-- date d'expiration de la carte -->
-          <div class="form-group">
-          <label for="dateExpiration">Date d'expiration :</label>
-          <input type="date" class="form-control" id="dateExpiration" name="date_expiration" required>
-          </div>
+<script>
+// Fonction pour afficher le formulaire correspondant
+function afficherFormulaire(id) {
+  // Masquer tous les formulaires
+  const formulaires = document.querySelectorAll('.col-md-9 > div');
+  formulaires.forEach(formulaire => formulaire.style.display = 'none');
 
-          <div class="form-group">
-            <label for="codeSecurite">Code de sécurité :</label>
-            <input type="number" class="form-control" id="codeSecurite" name="code_securite" required>
-          </div>
-          </div>
-          <button type="submit" name="payer_enrolement" class="btn btn-primary mt-3" data-toggle="modal" data-target="#maBoiteDialogue">Payer</button>
-        </form>
+  // Afficher le formulaire sélectionné
+  document.getElementById(id).style.display = 'block';
+}
+
+// Ajouter un écouteur d'événements à chaque lien
+const liens = document.querySelectorAll('.a');
+liens.forEach(lien => {
+  lien.addEventListener('click', function(event) {
+    event.preventDefault(); // Empêcher le comportement par défaut du lien
+    const id = this.getAttribute('href').substring(1); // Extraire l'ID du formulaire
+    afficherFormulaire(id);
+  });
+});
+
+// Afficher le premier formulaire par défaut
+afficherFormulaire('formulaire5'); 
+</script>
+
+
+            
         </div>
-      </div>
-      
-       
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-        <button type="button" name="enregistrement_carte" class="btn btn-primary">Enregistrer</button>
-      </div>
-      </div>
-    </div>
-    </div>
-  </div>
-  <footer class="bg-light text-center text-lg-start">
-  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-  © 2024 Université américaine de Kinshasa
-  </div>
-</footer>
+       </div>
+            <style>
+                 .p {
+    background-color: #0f162e;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-weight: 500;
+}
+
+                   .p:hover{ color: red;
+    background-color: #0f162e;}
+    .a:hover {
+                background-color: #0f162e;
+                color: white;
+            }
+
+            </style>
+            
+
+
+            <footer class="bg-light text-center text-lg-start mt-5">
+        <div class="container-fluid p-4 shadow-lg " style="background-color: aliceblue;">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase mx-5">Contact</h5>
+                    <p class="mx-5">
+                        Université américaine de Kinshasa<br>
+                        Adresse: 123 Rue de l'Université, Kinshasa<br>
+                        Téléphone: +243833650168<br>
+                        Email: info@auk.edu
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Liens utiles</h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="https://american.french-american.edu/" class="text-dark text-decoration-none">Site web de l'université</a>
+                        </li>
+                        <li>
+                            <a href="https://american.french-american.edu/contact" class="text-dark text-decoration-none">Contact</a>
+                        </li>
+                        <li>
+                            <a href="https://american.french-american.edu/about" class="text-dark text-decoration-none">À propos</a>
+                        </li>
+                    </ul>   
+                </div>
+            </div>
+        </div>
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2024 Université américaine de Kinshasa. Tous droits réservés.
+        </div>  
+    </footer>
    
 <script src="bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

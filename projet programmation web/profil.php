@@ -1,15 +1,19 @@
 <?php
 session_start();
 include("connexion_base.php");
-if (!($_SESSION['id_etudiant'])) {
+
+if (!isset($_SESSION['id_etudiant'])) {
     header("location: index.php");
+    exit;
 }
 
 // affichage des informations de l'étudiant existant dans la base de données
 $id_etudiant = $_SESSION['id_etudiant'];
-$sql="SELECT * FROM etudiant WHERE id_etudiant = '$id_etudiant'";
+$mot_de_passe_actuel = $_SESSION['mdp'];
+$sql = "SELECT * FROM etudiant WHERE id_etudiant = '$id_etudiant'";
 $data = $dbh->query($sql)->fetchAll();
-foreach($data as $row){
+
+foreach ($data as $row) {
     $nom_etudiant = $row['nom_etudiant'];
     $postnom_etudiant = $row['postnom_etudiant'];
     $prenom_etudiant = $row['prenom_etudiant'];
@@ -20,11 +24,13 @@ foreach($data as $row){
     $faculte = $row['faculte'];
     $licence = $row['licence'];
     $mot_de_passe = $row['mot_de_passe'];
-
+    $photo = $row['photo_etudiant'];
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,8 +53,8 @@ foreach($data as $row){
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item" >
-                        <a class="nav-link" href="accueil.php" >Accueil</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="accueil.php">Accueil</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="payement.php">Frais académiques</a>
@@ -57,7 +63,7 @@ foreach($data as $row){
                         <a class="nav-link" href="carte.php">Carte d'étudiant</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="profil.php" style="border-bottom: 2px solid white;">Votre profil</a> 
+                        <a class="nav-link" href="profil.php" style="border-bottom: 2px solid white;">Votre profil</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link btn btn-login btn-block bg-primary" href="logout.php">Déconnexion</a>
@@ -66,117 +72,126 @@ foreach($data as $row){
             </div>
         </div>
     </nav>
-    <style>
-            .navbar-nav .nav-link:hover {
-                border-bottom: 2px solid red;
-            }
-        </style>
 
-<div class="container light-style flex-grow-1 container-p-y">
-        <h4 class="font-weight-bold py-3 mb-4">
-            votre profil
+    <div class="container light-style flex-grow-1 container-p-y">
+        <h2 class="font-weight-bold py-3 mb-4 text-primary">
+            Votre profil
+        </h2>
 
-        </h4>
         <!-- menu à gauche -->
         <div class="card overflow-hidden">
             <div class="row no-gutters row-bordered row-border-light">
-                <div class="col-md-3 pt-0">
+                <div class="col-md-3 pt-0" style="border-right: 1px solid #b6b9c4;">
                     <div class="list-group list-group-flush account-settings-links">
-                        <a class="list-group-item list-group-item-action active" data-toggle="list"
-                            href="#account-general">informations générales</a>
-                        <a class="list-group-item list-group-item-action" data-toggle="list"
-                            href="#account-change-password">Changer de mot de passe</a>
-                        <a class="list-group-item list-group-item-action" data-toggle="list"
-                            href="#account-info">Info de payement des frais et de la cartes</a>
-                        <a class="list-group-item list-group-item-action" data-toggle="list"
-                            href="#account-notifications">Notifications</a>
+                        <a class="list-group-item list-group-item-action active a" id="menu_click" data-toggle="list" href="#account-general">informations générales</a>
+                        <a class="list-group-item list-group-item-action a" id="menu" data-toggle="list" href="#account-change-password">Changer de mot de passe</a>
                     </div>
+                    <script>
+                        document.getElementById("menu").addEventListener("click", function() {
+                            document.querySelector("footer").style.position = "fixed";
+                            document.querySelector("footer").style.bottom = "0";
+                            document.querySelector("footer").style.width = "100%";
+                        });
+
+                        //quand on clique sur l'onglet informations générales le footer redevient comme avant
+                        document.getElementById("menu_click").addEventListener("click", function() {
+                            document.querySelector("footer").style.position = "relative";
+                        });
+                    </script>
                 </div>
+
                 <!-- contenu du profil -->
                 <div class="col-md-9">
                     <div class="tab-content">
                         <div class="tab-pane fade active show" id="account-general">
                             <div class="card-body media align-items-center">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt
-                                    class="d-block ui-w-80">
+                                <center><img src="./images/<?php echo $photo; ?>" class="my-3 w-25" alt="photo de profil"></center>
                                 <div class="media-body ml-4">
-                                    <form action="traitement_profil.php" method="post">
-                                    <label class="btn btn-outline-primary">
-                                        modifiez votre photo noter que c'est la photo que vous aurez sur votre carte d'étudiant
-                                        <input type="file" name="photo" class="account-settings-fileinput">
-                                    </label> &nbsp;
-                                    <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                                    <form action="traitement_profil.php" method="post" enctype="multipart/form-data">
+                                        <center>
+                                            <label> modifiez votre photo noter que c'est la photo que vous aurez sur votre carte d'étudiant</label>
+                                            <br>
+                                            <input type="file" class="form-control justify-content-center w-25" name="photo" id="">
+                                        </center>
                                 </div>
                             </div>
                             <hr class="border-light m-0">
-                            <!-- affichage du message de confirmation -->
-                            <?php
-                            if (!empty($_SESSION['message_modif'])) {
-                            $message = $_SESSION['message_modif'];
-                            $color = '';
-                            if ($message == 'Information mises à jour avec succès!') {   
-                            $color = 'text-success';
-                            } elseif ($message == 'erreur lors de la mise à jour des informations') {
-                            $color = 'text-danger';
-                            }
-                            elseif ($message == 'Aucune information à mettre à jour') {
-                            $color = 'text-primary';
-                            }
-                            ?>
-                            <h5 class="text-center <?php echo $color; ?> alert"><?php echo $message; ?></h5>
-                            <?php } ?>
 
-                            
+                            <!-- affichage du message de confirmation -->
+                            <?php if (!empty($_SESSION['message_modif'])) : ?>
+                                <?php
+                                $message = $_SESSION['message_modif'];
+                                $color = '';
+
+                                if ($message == 'Information mises à jour avec succès!') {
+                                    $color = 'text-success';
+                                } elseif ($message == 'erreur lors de la mise à jour des informations') {
+                                    $color = 'text-danger';
+                                } elseif ($message == 'Aucune information à mettre à jour') {
+                                    $color = 'text-primary';
+                                }
+                                ?>
+
+                                <h5 class="text-center <?php echo $color; ?>"><?php echo $message; ?></h5>
+                            <?php endif; ?>
 
                             <div class="card-body">
                                 <div class="form-group">
                                     <label class="form-label">Nom</label>
-                                    <input type="text" name="nom_etudiant" class="form-control mb-1" value="<?php echo $nom_etudiant;?>">
+                                    <input type="text" name="nom_etudiant" class="form-control mb-1" placeholder="<?php echo $nom_etudiant; ?>">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">post-nom</label>
-                                    <input type="text" name="postnom_etudiant" class="form-control" value="<?php echo $postnom_etudiant;?>">
+                                    <input type="text" name="postnom_etudiant" class="form-control" placeholder="<?php echo $postnom_etudiant; ?>">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">prenom</label>
-                                    <input type="text" name="prenom_etudiant" class="form-control mb-1" value="<?php echo $prenom_etudiant;?>">   
+                                    <input type="text" name="prenom_etudiant" class="form-control mb-1" placeholder="<?php echo $prenom_etudiant; ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Sexe</label>
+                                    <select name="sexe" class="form-control">
+                                        <option value="masculin">Homme</option>
+                                        <option value="feminin">Femme</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">matricule</label>
-                                    <input type="number" name="matricule" class="form-control" value="<?php echo $matricule;?>">
+                                    <input type="number" name="matricule" class="form-control" placeholder="<?php echo $matricule; ?>">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">email</label>
-                                    <input type="email" name="email" class="form-control" value="<?php echo $email;?>">
+                                    <input type="email" name="email" class="form-control" placeholder="<?php echo $email; ?>">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">date de naissance</label>
-                                    <input type="date" name="date_naissance" class="form-control" value="<?php echo $date_naissance;?>">
+                                    <input type="date" name="date_naissance" class="form-control" placeholder="<?php echo $date_naissance; ?>" max="2007-01-01">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">adresse</label>
-                                    <input type="text" name="adresse_etudiant" class="form-control" value="<?php echo $adresse_etudiant;?>">
+                                    <input type="text" name="adresse_etudiant" class="form-control" placeholder="<?php echo $adresse_etudiant; ?>">
                                 </div>
                                 <div class="form-group">
-                            <label for="">faculté</label>
-                            <select id="" name="faculte" class="form-control" required>
-                                <option value="sciences informatique">Sciences Informatique</option>
-                                <option value="économie">Économie</option>
-                                <option value="relation internationale">Relation Internationale</option>
-                                <option value="architectecture">architecture</option>
-                                <option value="polytechnique">politechnique</option>
-                            </select>
-                            </div>
-                            <div class="form-group">
-                            <label for="">licence</label>
-                            <select id="" name="licence" class="form-control" required>
-                                <option value="premiere">première</option>
-                                <option value="deuxieme">deuxième</option>
-                                <option value="trosieme">trosième</option>
-                            </select>
-                            </div>
+                                    <label for="">faculté</label>
+                                    <select id="" name="faculte" class="form-control">
+                                        <option value="sciences informatique">Sciences Informatique</option>
+                                        <option value="économie">Économie</option>
+                                        <option value="relation internationale">Relation Internationale</option>
+                                        <option value="architectecture">architecture</option>
+                                        <option value="polytechnique">politechnique</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">licence</label>
+                                    <select id="" name="licence" class="form-control">
+                                        <option value="premiere">première</option>
+                                        <option value="deuxieme">deuxième</option>
+                                        <option value="trosieme">trosième</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
+
                         <div class="tab-pane fade" id="account-change-password">
                             <div class="card-body pb-2">
                                 <div class="form-group">
@@ -191,152 +206,99 @@ foreach($data as $row){
                                     <label class="form-label">répétez le mot de passe</label>
                                     <input type="password" id="mot_de_passeC" class="form-control">
                                 </div>
-                            </div>
-                        </div>
-                        <!-- info de payement des frais et de la carte -->
+                                <script>
+                                    var mot_de_passeA = document.getElementById("mot_de_passeA");
+                                    var mot_de_passe = document.getElementById("mot_de_passe");
+                                    var mot_de_passeC = document.getElementById("mot_de_passeC");
 
-                        <script>
-                            // Récupérer le mot de passe actuel depuis la base de données
-                            var motDePasseActuel = "<?php echo $mot_de_passe; ?>";
+                                    mot_de_passeC.addEventListener("input", function() {
+                                        if (mot_de_passe.value !== mot_de_passeC.value) {
+                                            mot_de_passeC.setCustomValidity("Les mots de passe ne correspondent pas");
+                                        } else {
+                                            mot_de_passeC.setCustomValidity("");
+                                        }
+                                    });
 
-                            // Vérifier si le mot de passe actuel correspond à celui entré par l'utilisateur
-                            function verifierMotDePasseActuel() {
-                                var motDePasseActuelInput = document.getElementById("mot_de_passeA").value;
-                                if (motDePasseActuelInput !== motDePasseActuel) {
-                                    alert("Le mot de passe actuel est incorrect");
-                                    return false;
-                                }
-                                return true;
-                            }
+                                    var mdp_actuel = "<?php echo $mot_de_passe_actuel; ?>";
 
-                            // Vérifier si le nouveau mot de passe correspond à celui répété
-                            function verifierNouveauMotDePasse() {
-                                var nouveauMotDePasse = document.getElementById("mot_de_passe").value;
-                                var motDePasseRepete = document.getElementById("mot_de_passeC").value;
-                                if (nouveauMotDePasse !== motDePasseRepete) {
-                                    alert("Le nouveau mot de passe ne correspond pas au mot de passe répété");
-                                    return false;
-                                }
-                                return true;
-                            }
-
-                            // Valider le formulaire avant de le soumettre
-                            function validerFormulaire() {
-                                if (!verifierMotDePasseActuel() || !verifierNouveauMotDePasse()) {
-                                    return false;
-                                }
-                                return true;
-                            }
-
-                            // Ajouter un événement de soumission du formulaire
-                            var formulaire = document.getElementById("account-change-password");
-                            formulaire.addEventListener("submit", function(event) {
-                                if (!validerFormulaire()) {
-                                    event.preventDefault();
-                                }
-                            });
-                        </script>
-                        <div class="tab-pane fade" id="account-info">
-                            <div class="card-body pb-2">
-                                     <h3>ici vous retrouvrez les informations en liens avec les payements de vos frais et de larte d'étudiant</h3>   
-                                
-                                <div class="form-group">
-                                    <label class="form-label">selectionné le payement dont vous voulez connaitre le statut</label>
-                                    <select class="form-control" name="tranche">
-                                        <option value="" selected disabled>Select a payment option</option>
-                                        <option value="premiere">première tranche</option>
-                                        <option value="deuxieme">deuxième tranche</option>
-                                        <option value="troisieme">troisième tranche</option>
-                                        <option value="carte_etudiant">frais de la carte d'étudiant</option>
-                                        <option value="enrolement">frais d'enrolement</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <hr class="border-light m-0">
-                            <div class="card-body pb-2">
-                                <h6 class="mb-4">information sur le payement</h6>
-                            </div>
-                        </div>
-                       
-                        <div class="tab-pane fade" id="account-notifications">
-                            <div class="card-body pb-2">
-                                <h6 class="mb-4">Activity</h6>
-                                <div class="form-group">
-                                    <label class="switcher">
-                                        <input type="checkbox" class="switcher-input" checked>
-                                        <span class="switcher-indicator">
-                                            <span class="switcher-yes"></span>
-                                            <span class="switcher-no"></span>
-                                        </span>
-                                        <span class="switcher-label">Email me when someone comments on my article</span>
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="switcher">
-                                        <input type="checkbox" class="switcher-input" checked>
-                                        <span class="switcher-indicator">
-                                            <span class="switcher-yes"></span>
-                                            <span class="switcher-no"></span>
-                                        </span>
-                                        <span class="switcher-label">Email me when someone answers on my forum
-                                            thread</span>
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="switcher">
-                                        <input type="checkbox" class="switcher-input">
-                                        <span class="switcher-indicator">
-                                            <span class="switcher-yes"></span>
-                                            <span class="switcher-no"></span>
-                                        </span>
-                                        <span class="switcher-label">Email me when someone follows me</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <hr class="border-light m-0">
-                            <div class="card-body pb-2">
-                                <h6 class="mb-4">Application</h6>
-                                <div class="form-group">
-                                    <label class="switcher">
-                                        <input type="checkbox" class="switcher-input" checked>
-                                        <span class="switcher-indicator">
-                                            <span class="switcher-yes"></span>
-                                            <span class="switcher-no"></span>
-                                        </span>
-                                        <span class="switcher-label">News and announcements</span>
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="switcher">
-                                        <input type="checkbox" class="switcher-input">
-                                        <span class="switcher-indicator">
-                                            <span class="switcher-yes"></span>
-                                            <span class="switcher-no"></span>
-                                        </span>
-                                        <span class="switcher-label">Weekly product updates</span>
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="switcher">
-                                        <input type="checkbox" class="switcher-input" checked>
-                                        <span class="switcher-indicator">
-                                            <span class="switcher-yes"></span>
-                                            <span class="switcher-no"></span>
-                                        </span>
-                                        <span class="switcher-label">Weekly blog digest</span>
-                                    </label>
-                                </div>
+                                    function validateForm() {
+                                        if (mot_de_passe_actuel.value !== mdp_actuel) {
+                                            mot_de_passe_actuel.setCustomValidity("Le mot de passe actuel est incorrect");
+                                        } else {
+                                            mot_de_passe_actuel.setCustomValidity("");
+                                        }
+                                    }
+                                </script>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="text-right mt-3">
-            <button type="submit" name="modifier" class="btn btn-primary">enregistrer les modifications</button>&nbsp;
+            <style>
+                .btn {
+                    background-color: #0f162e;
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 10px 20px;
+                    font-weight: 500;
+                }
+
+                #btn:hover {
+                    color: red;
+                    background-color: #0f162e;
+                }
+                .nav-link:hover {
+                    border-bottom: 2px solid red;
+                }
+                .a:hover {
+                    background-color: #0f162e;
+                    color: white;
+                }
+            
+            </style>
+            <button type="submit" name="modifier" id="btn" class="btn mb-3">enregistrer les modifications</button>
         </div>
         </form>
     </div>
+
+    <!-- footer -->
+    <footer class="bg-light text-center text-lg-start">
+        <div class="container-fluid p-4 shadow-lg " style="background-color: aliceblue;">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase mx-5">Contact</h5>
+                    <p class="mx-5">
+                        Université américaine de Kinshasa<br>
+                        Adresse: 123 Rue de l'Université, Kinshasa<br>
+                        Téléphone: +243833650168<br>
+                        Email: info@auk.edu
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Liens utiles</h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="https://american.french-american.edu/" class="text-dark text-decoration-none">Site web de l'université</a>
+                        </li>
+                        <li>
+                            <a href="https://american.french-american.edu/contact" class="text-dark text-decoration-none">Contact</a>
+                        </li>
+                        <li>
+                            <a href="https://american.french-american.edu/about" class="text-dark text-decoration-none">À propos</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2024 Université américaine de Kinshasa. Tous droits réservés.
+        </div>
+    </footer>
+
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -344,4 +306,5 @@ foreach($data as $row){
     </script>
 
 </body>
+
 </html>

@@ -1,5 +1,3 @@
-<?php
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +17,7 @@
         <div class="row">
             <div class="col-md-6 mx-auto" style="margin-top: 60px;">
                 <div class="login-container border border-3 border-danger" style="padding: 40px;">
-                    <h2 class="text-center">AUK Payment Portail</h2>
+                    <h2 class="text-center">AUK Paye inscription</h2>
                     <?php
                     session_start();
                     if(isset($_SESSION['message_email'])){ ?>
@@ -38,7 +36,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">email</label>
-                            <input type="email" name="email" id="">
+                            <input type="email" name="email" class="form-control" id="">
                         </div>
                         <div class="form-group">
                             <label for="">faculté</label>

@@ -20,7 +20,7 @@ include("traitement_connexion.php");
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="login-container border border-3 border-danger" style="margin-top: 140px; padding: 20px;">
-                    <h2 class="text-center">CONNECTEZ VOUS A AUK PAYEMENT</h2>
+                    <h2 class="text-center">CONNECTEZ VOUS A AUK PAIEMENT</h2>
                     <?php if(!empty($message)): ?>
                         <div class="alert alert-danger">
                             <?= $message; ?>
@@ -29,7 +29,7 @@ include("traitement_connexion.php");
                     <form action="traitement_connexion.php" method="post">
                         <div class="form-group">
                             <label for="username">email</label>
-                            <input type="text" id="username" name="email" class="form-control" required>
+                            <input type="email" id="username" name="email" class="form-control" required>
                         </div>
                         <div class="form-group">    
                             <label for="password">mot de passe</label>

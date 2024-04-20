@@ -9,7 +9,7 @@ if(isset($_POST['enregistrer'])){
     $nom = $_POST['nom'];
     $prenom = $_POST['prenom'];
     $email = $_POST['email'];
-    $mot_de_passe = MD5($_POST['mot_de_passe']);
+    $mot_de_passe = hash('sha512', $_POST['mot_de_passe']);
     $faculte = $_POST['faculte'];
 
     //voir si l'email est dans la base données
@@ -33,6 +33,7 @@ if(isset($_POST['enregistrer'])){
 
         // Stocker l'ID dans la session
         $_SESSION['id_etudiant'] = $last_insert_id;
+        $_SESSION['mdp'] = $mot_de_passe;
 
         // Redirection vers la page d'accueil
         header("location:accueil.php");

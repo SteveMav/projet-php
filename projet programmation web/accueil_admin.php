@@ -1,6 +1,4 @@
-<?php
-include("connexion_base.php");
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +13,7 @@ include("connexion_base.php");
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #0f162e !important;">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <img src="./images/Logo.png" alt="auk" width="60">
@@ -25,53 +23,167 @@ include("connexion_base.php");
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item a">
-                        <a class="nav-link" href="accueil.php">Accueil</a>
+                    <li class="nav-item" >
+                        <a class="nav-link" href="accueil_admin.php" style="border-bottom: 2px solid white;">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="payement.php">frais académiques</a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link " href="carte.php">Carte d'étudiant</a>
+                        <a class="nav-link" href="payement_admin.php">Frais académiques</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn btn-login btn-block bg-primary" href="logout.php">déconnexion</a>²
+                        <a class="nav-link" href="carte_admin.php">Carte d'étudiant</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-login btn-block bg-primary" href="logout.php">Déconnexion</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
+    <style>
+            .navbar-nav .nav-link:hover {
+                border-bottom: 2px solid red;
+            }
+        </style>
+    <div class="container">
+        <div class="row align-items-center header" style="height: 500px;">
+            <div class="col-md-6 header_a">
+                <h1 class="">bienvenue dans AUK paye ici vous aurez un aperçu global des payement effectué sur le site</h1>
+                <p class="">Bienvenue dans l'espace administrateur, vous aurez ici un aperçu de chaque payement effectué sur le site et vous pourez aussi avoir un aperçu des cartes qui ont été payé sur l site.</p>
 
-    <!-- Contenu -->
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-4">
-                <a href="payement.php" class="text-decoration-none">
-                    <div class="border border-3 border-danger p-3">
-                        <h1 class="paye">Payez vos frais académiques ici</h1>
-                        <p>Payez facilement et en toute sécurité vos frais</p>
+                <style>
+                    .btn {
+                        background-color: #0f162e;
+                        color: #ffffff;
+                        border: none;
+                        border-radius: 5px;
+                        padding: 10px 20px;
+                        font-weight: 500;
+                    }
+
+                    #btn:hover {
+                        color: #eb0c0c;
+                        background-color: #0f162e;
+                    }
+                </style>
+                <a href="payement.php" class="btn" id="btn"> Accedez <i class="fa fa-arrow-rigth"></i></a>
+            </div>
+            <div class="col-md-6 d-none d-sm-block mb-0">
+                <!-- Image of a person's profile surrounded by abstract shapes -->
+                <img src="./images/etudiant_accueil.png" alt="Profile" class="img-fluid image_header" width="100%">
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid p-5 mt-5" style=" background-image: url(./images/backf.jpg); background-position: center; background-repeat: no-repeat; background-size: cover;">
+        <div class="row" style="background: none">
+            <div class="col-md-3 mx-5 " style="background: none">
+                <a href="payement.php" class="text-decoration-none shadow-lg" style="background: none">
+                    <div class="card  mb-3" style="height: 600px !important; background: none">
+                        <div class="card-body" style="color: #ffffff;background-color: #0c0c1684;">
+                            <h5 class="card-title">Payez vos frais académiques ici</h5>
+                            <p class="card-text">Payez facilement et en toute sécurité vos frais</p>
+                        </div>
                     </div>
                 </a>
             </div>
-            <div class="col-md-4">
-                <a href="payement.php" class="text-decoration-none">
-                    <div class="border border-3 border-danger p-3">
-                        <h1 class="paye">Payez ici les frais d'enrolement</h1>
-                        <p>Payez facilement et en toute sécurité vos frais</p>
+            <div class="col-md-3 mx-5" style="background: none">
+                <a href="payement.php" class="text-decoration-none shadow-lg " style="background: none">
+                    <div class="card  mb-3" style="height: 600px !important;background: none">
+                        <div class="card-body" style="color: #ffffff;background-color: #0c0c1684;">
+                            <h5 class="card-title">Payez ici les frais d'enrolement</h5>
+                            <p class="card-text">Payez facilement et en toute sécurité vos frais</p>
+                        </div>
                     </div>
                 </a>
             </div>
-            <div class="col-md-4">
-                <a href="carte.php" class="text-decoration-none">
-                    <div class="border border-3 border-danger p-3">
-                        <h1 class="paye">Obtenez votre carte d'étudiant</h1>
-                        <p>Obtenez votre carte d'étudiant en un clic</p>
+            <div class="col-md-3 mx-5 " style="background: none">
+                <a href="carte.php" class="text-decoration-none shadow-lg" style="background: none">
+                    <div class="card  mb-3" style="height: 600px !important;background: none">
+                        <div class="card-body" style="color: #ffffff;background-color: #0c0c1684;">
+                            <h5 class="card-title">Payez et formulez ici votre carte d'élève</h5>
+                            <p class="card-text">Payez facilement et en toute sécurité votre carte d'étudiant</p>
+                            <p class="card-title">avec ce nouveau système en ligne </p>
+                        </div>
                     </div>
                 </a>
             </div>
         </div>
+    </div>
 
+    <!-- Add animation to elements -->
+    <style>
+        .header_a {
+            animation: slideInLeft 1s ease-in-out;
+        }
+
+        .image_header {
+            animation: slideInRight 1s ease-in-out;
+        }
+
+        .card {
+            animation: slideInUp 1s ease-in-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+    </style>
+        <footer class="bg-light text-center text-lg-start">
+        <div class="container-fluid p-4 shadow-lg " style="background-color: aliceblue;">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase mx-5">Contact</h5>
+                    <p class="mx-5">
+                        Université américaine de Kinshasa<br>
+                        Adresse: 123 Rue de l'Université, Kinshasa<br>
+                        Téléphone: +243833650168<br>
+                        Email: info@auk.edu
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0 ">
+                    <h5 class="text-uppercase">Liens utiles</h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="https://american.french-american.edu/" class="text-dark text-decoration-none">Site web de l'université</a>
+                        </li>
+                        <li>
+                            <a href="https://american.french-american.edu/contact" class="text-dark text-decoration-none">Contact</a>
+                        </li>
+                        <li>
+                            <a href="https://american.french-american.edu/about" class="text-dark text-decoration-none">À propos</a>
+                        </li>
+                    </ul>   
+                </div>
+            </div>
+        </div>
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2024 Université américaine de Kinshasa. Tous droits réservés.
+        </div>  
+    </footer>
 </body>
-</html>
-

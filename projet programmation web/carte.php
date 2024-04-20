@@ -3,7 +3,14 @@ include("traitement_carte.php");
 if (!($_SESSION['id_etudiant'])) {
   header("location: index.php");
 }
+$sql="SELECT * FROM cartes_etudiant WHERE id_etudiant = '$id_etudiant'";
+$info_carte = $dbh->query($sql)->fetchAll();
+foreach($info_carte as $info){
+  $date_payement = $info['date_payement'];
+  $date_expiration = date('d/m/Y', strtotime('+1 year'));}
+
 foreach ($data as $row){
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,35 +81,55 @@ foreach ($data as $row){
       <h5 class="text-center <?php echo $color; ?> alert"><?php echo $message; ?></h5>
 
     <?php } ?>
-    
+    <div class="container mt-5">
+      <div class="container mt-5 shadow-lg rounded-3" id="carte">
+        <div class="container d-flex">
+          <div class="container-fluid w-50 justify-content-start" id="gauche"></div>
+          <div class="container-fluid w-50 justify-content-start" id="droite"></div>
+        </div>
+        <div class="container text-center " id="image" style="width: 250px; height: 250px; position: relative; bottom: 150px;">
+          <img src="./images/logo.png" alt="" class="bg-whit" width="200px" style="position: relative; top: 50px;">
+        </div>
+        <div class="container d-flex flex-wrap" style="position: relative; bottom: 230px; height: 260px;">
+          <div class="col-md-4">
+            <p style="margin-top: 30px; margin-bottom: 0.1em;"><strong>nom</strong></p>
+            <p style="margin-bottom: 0.1em;"><strong>prenom</strong></p>
+            <p style="margin-bottom: 0.1em;"><strong>sexe</strong></p>
+            <p style="margin-bottom: 0.1em;"><strong>lieu et date naissance</strong></p>
+            <p style="margin-bottom: 0.1em;"><strong>faculté et departement</strong></p>
+            <p style="margin-bottom: 0.1em;"><strong>promotion</strong></p>
+            <p style="margin-bottom: 0.1em;"><strong>matricule</strong></p>
+            <p style="margin-bottom: 0.1em;"><strong>adresse</strong></p>
+            <p style="margin-bottom: 0.1em;"><strong>validité et date delivrance</strong></p>
+          </div>
 
-    <div class="row justify-content-start mt-5">
-      <div class="col-md-6 mx-auto">
-        <div class="card student-card">
-          <div class="card-body">
-            <div class="student-avatar">
-               <img src="./images/Logo.png" alt="" width="40" class="justify-content-start"> CARTE D'ETUDIANT
-            </div>
-          
-            <h5 class="card-title student-name text-right"><?php echo $row['nom_etudiant'].' '.$row['prenom_etudiant']; ?></h5>
-            <div class="student-info">
-              <p><strong>numero matricule:</strong> <?php echo $row['matricule'];?></p>
-              <p><strong>Date de naissance :</strong> <?php echo date('d/m/Y', strtotime($row['date_naissance'])); ?></p>
-
-              <p><strong>licence:</strong> <?php echo $row['licence'];?></p>
-              <p><strong>Faculté:</strong> <?php echo $row['faculte']; }?></p>
-              <p><strong>Date d'expiration :</strong> <?php echo date('d-m-Y', strtotime('+1 year')); ?></p>
-              <p><strong>Année académique:</strong> 2023-2024</p>
-            </div>
+          <div class="col-md-4">
+            <h5 style="margin-bottom: 0.2em;"><u>carte d'étudiant</u></h5>
+            <p style="margin-top: 5px; margin-bottom: 0.1em;  "><strong>:<?php echo $row['nom_etudiant']." ".$row['postnom_etudiant'];?></strong></p>
+            <p style="margin-top: 5px; margin-bottom: 0.1em; position: relative; bottom: 5px; "><strong>:<?php echo $row['prenom_etudiant']; ?></strong></p>
+            <p style="margin-top: 5px; margin-bottom: 0.1em; position: relative; bottom: 5px; " ><strong>:<?php echo $row['sexe']; ?></strong></p>
+            <p style="margin-top: 5px; margin-bottom: 0.1em; position: relative; bottom: 10px; "><strong>:<?php echo $row['lieu_naissance']." ".$row['date_naissance']; ?></strong></p>
+            <p style="margin-top: 5px; margin-bottom: 0.1em; position: relative; bottom: 14px; "><strong>:<?php echo $row['faculte']; ?></strong></p>
+            <p style="margin-top: 5px; margin-bottom: 0.1em; position: relative; bottom: 16px; "><strong>:<?php echo $row['licence']; ?></strong></p>
+            <p style="margin-top: 5px; margin-bottom: 0.1em; position: relative; bottom: 20px;"><strong>:<?php echo $row['matricule']; ?></strong></p>
+            <p style="margin-top: 5px; margin-bottom: 0.1em; position: relative; bottom: 22px;"><strong>:<?php echo $row['adresse']; ?></strong></p>
+            <p style="margin-top: 5px; margin-bottom: 0.1em; position: relative; bottom: 26px;"><strong>:<?php echo date('d/m/Y', strtotime($date_payement))."exp".$date_expiration; ?></strong></p>
+            $date_expiration = date('d/m/Y', strtotime('+1 year'));
+          </div>
+          <div class="col-md-4">
+            <img src="./images/<?php echo $row['photo_etudiant'];} ?>" alt="nvidia" class="shadow-lg" width="150px" height="150px" style="border: 2px solid #ffffff00; position: relative; left: 55px; top: 30px;">
+            <p style="font-size: smaller; position: relative; top: 40px; left: 30px;" class="text-center"><strong>Marcel Kasenga dimandja</strong></p>
+            <p style="font-size: smaller; position: relative; top: 20px; left: 30px;" class="text-center"><strong>président</strong></p>
           </div>
         </div>
+        <div class="container text-white" style=" font-size: smaller;background-color:rgba(255, 0, 0, 0.653);position: relative; bottom: 230px; right: 20px; width: 850px;">les autorités tant civique que militaire sont priés de porté toute assistance au porteur de la présente carte</div>
       </div>
     </div>
-  </div>
+
   <div class="container">
     <div class="row justify-content-center">
     <div class="col-md-6">
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#formulaireModal">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#formulaireModal" style="position: relative; top:30px; left: 200px" id="button_commande">
       Commander la carte
       </button>
     </div>
@@ -136,7 +163,7 @@ foreach ($data as $row){
            <!-- date d'expiration de la carte -->
           <div class="form-group">
           <label for="dateExpiration">Date d'expiration :</label>
-          <input type="date" class="form-control" id="dateExpiration" name="date_expiration" required>
+          <input type="date" class="form-control" id="dateExpiration" name="date_expiration" min="<?php echo date('Y-m-d'); ?>" required>
           </div>
 
           <div class="form-group">
@@ -150,10 +177,6 @@ foreach ($data as $row){
       </div>
       
        
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-        <button type="button" name="enregistrement_carte" class="btn btn-primary">Enregistrer</button>
-      </div>
       </div>
     </div>
     </div>
@@ -161,16 +184,60 @@ foreach ($data as $row){
    
 
 
-  <footer class="bg-light text-center text-lg-start" id="connexion">
-  <!-- Copyright -->
-  <div class="text-center p-3" style="background-color: #b6b9c4;position: absolute;
-bottom: 0;
-width: 100%;
-">
-    © 2024 Copyright:
-    <a class="text-dark" href="https://american.french-american.edu/">Université américaine de Kinshasa</a>
-  </div>
-</footer>   
+    <!-- footer -->
+    <style>
+      footer{
+        margin-top: 100px !important;
+        background-color:#f8f9faa4;
+      }
+      body {
+    background-color: #f8f9fa;
+}
+.navbar {
+    background-color: #0f162e;
+}
+
+.navbar-brand {
+    color: #ffffff;
+    font-weight: bold;
+}
+.navbar-nav .nav-link {
+    color: #ffffff;
+}
+
+    </style>
+  <footer class="bg-light text-center text-lg-start">
+        <div class="container-fluid p-4 shadow-lg " style="background-color: aliceblue;">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase mx-5">Contact</h5>
+                    <p class="mx-5">
+                        Université américaine de Kinshasa<br>
+                        Adresse: 123 Rue de l'Université, Kinshasa<br>
+                        Téléphone: +243833650168<br>
+                        Email: info@auk.edu
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0 ">
+                    <h5 class="text-uppercase">Liens utiles</h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="https://american.french-american.edu/" class="text-dark text-decoration-none">Site web de l'université</a>
+                        </li>
+                        <li>
+                            <a href="https://american.french-american.edu/contact" class="text-dark text-decoration-none">Contact</a>
+                        </li>
+                        <li>
+                            <a href="https://american.french-american.edu/about" class="text-dark text-decoration-none">À propos</a>
+                        </li>
+                    </ul>   
+                </div>
+            </div>
+        </div>
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2024 Université américaine de Kinshasa. Tous droits réservés.
+        </div>  
+    </footer>
 <script>
   
   

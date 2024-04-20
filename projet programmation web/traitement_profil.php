@@ -1,25 +1,29 @@
 <?php
 // connection à la base de données
 include("connexion_base.php");
-
 // recupération de l'id de l'étudiant
 session_start();
 $id_etudiant = $_SESSION['id_etudiant'];
-
 // recupération des informations de l'étudiant du formulaire
-
 if(isset($_POST['modifier'])){
-    $tranche = $_POST['tranche'];
+    $photo = $_FILES['photo']['name'];
+    $photo_tmp = $_FILES['photo']['tmp_name'];
     $sql = "UPDATE etudiant SET";
     $updates = array();
-
-    if(!empty($_POST['nom'])){
-        $nom = $_POST['nom'];
+    if(!empty($_FILES['photo']['name'])){
+        $photo = $_FILES['photo']['name'];
+        $updates[] = "photo_etudiant = '$photo'";
+        $folder = "./images/".$photo;
+        move_uploaded_file($photo_tmp, $folder);
+    
+    }
+    if(!empty($_POST['nom_etudiant'])){
+        $nom = $_POST['nom_etudiant'];
         $updates[] = "nom_etudiant = '$nom'";
     }
 
-    if(!empty($_POST['prenom'])){
-        $prenom = $_POST['prenom'];
+    if(!empty($_POST['prenom_etudiant'])){
+        $prenom = $_POST['prenom_etudiant'];
         $updates[] = "prenom_etudiant = '$prenom'";
     }
 
@@ -36,25 +40,27 @@ if(isset($_POST['modifier'])){
         $date_naissance = $_POST['date_naissance'];
         $updates[] = "date_naissance = '$date_naissance'";
     }
+    if(!empty($_POST['sexe'])){
+        $sexe = $_POST['sexe'];
+        $updates[] = "sexe = '$sexe'";
+    }
     //adresse
-    if(!empty($_POST['adresse'])){
-        $adresse = $_POST['adresse'];
+    if(!empty($_POST['adresse_etudiant'])){
+        $adresse = $_POST['adresse_etudiant'];
         $updates[] = "adresse = '$adresse'";
     }
-
     if(!empty($_POST['faculte'])){
         $faculte = $_POST['faculte'];
         $updates[] = "faculte = '$faculte'";
     }
-
     if(!empty($_POST['mot_de_passe'])){
-        $mot_de_passe = MD5($_POST['mot_de_passe']);
+        $mot_de_passe = hash("sha512", $_POST['mot_de_passe']);
         $updates[] = "mot_de_passe = '$mot_de_passe'";
     }
-
     if(!empty($updates)){
         $sql .= " " . implode(", ", $updates);
         $sql .= " WHERE id_etudiant = '$id_etudiant'";
+        echo $sql;
         $data = $dbh->query($sql);
         $_SESSION['message_modif'] = "Informations mises à jour avec succès!";
     } else {
@@ -68,32 +74,6 @@ else{
     header("location: profil.php");
 }
 
-if (!empty($_POST['tranche'])){
-    // dans le cas où l'étudiant à selectionné la carte étudiant
-    if ($tranche == "carte_etudiant"){
-        $check_sql = "SELECT * FROM cartes_etudiant WHERE id_etudiant = '$id_etudiant'";
-        $check_data = $dbh->query($check_sql);
-        $check_result = $check_data->fetch(PDO::FETCH_ASSOC);
-        if ($check_result) {
-            $_SESSION['message_tranche'] = "Vous avez déjà payé pour la carte!";
-            header("location: profil.php");
-        } else {
-            $_SESSION['message_tranche'] = "Vous n'avez pas encore payé pour la carte rendez vous à l'onglet carte pour le faire!";
-            header("location: profil.php");
-        }
-    }
-        // voir si l'étudiant a déjà payé pour la tranche selectionné
 
-    $check_sql = "SELECT * FROM frais_academique WHERE id_etudiant = '$id_etudiant' AND tranche = '$tranche'";
-    $check_data = $dbh->query($check_sql);
-    $check_result = $check_data->fetch(PDO::FETCH_ASSOC);
-     if ($check_result) {
-        $_SESSION['message_tranche'] = "Vous avez déjà payé pour la tranche!";
-        header("location: profil.php");
-    } else {
-        $_SESSION['message_tranche'] = "Vous n'avez pas encore payé pour la tranche rendez vous à l'onglet frais academique pour le faire!";
-        header("location: profil.php");
-}
-}
 
 ?>

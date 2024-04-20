@@ -1,0 +1,106 @@
+/* Votre code CSS ici
+
+/* Couleur de fond du body */
+body {
+background-image: url(image/back_ground.jpg);
+background-size: 100%;
+}
+
+/* Style du titre principal */
+h1 {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Style du paragraphe principal */
+p {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+/* Style des badges */
+.badge {
+    font-size: 16px;
+    padding: 10px 15px;
+    border-radius: 20px;
+}
+
+/* Style du bouton Connect Wallet */
+.nav-link {
+    color: #FFD700;
+}
+
+/* Style de l'image du profil */
+.img {
+    border-radius: 50%;
+}
+
+/* Style du bouton Subscribe */
+.btn {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 15px 25px;
+    border-radius: 10px;
+}
+.numbers_in_this{
+
+   background-color: rgba(139, 140, 141, 0.164); 
+   border-radius: 10px;
+   height: 50PX;
+}
+.header{
+border-radius: 10px;
+background: linear-gradient( rgba(44, 44, 37, 0.082), rgba(22, 21, 21, 0.082) );
+
+
+
+}
+/* Style des logos des partenaires */
+img {
+    
+    width: 100px;
+    height: 100px;
+}
+.image_header{
+    
+    width: 75%;
+  height: auto;
+border-radius: 5px;
+border-radius: 15px 50% 50% 15PX;
+box-shadow: inset 115px 5px 25px 5px rgba(26, 25, 24, 0.224);
+
+
+}
+.btn_one{
+    width: auto;
+    height: auto;
+    border-radius:50px ;
+    color: rgba(255, 255, 255, 0.297);
+    background-color:rgb(102, 100, 92);
+    border-color:rgba(255, 255, 255, 0.299) ;border-radius: 10%;
+    position: relative;
+    top: 50px;
+
+}
+/* .btn_one:hover,
+.btn_one:focus{ */
+    
+    /* border-radius:50px ;
+    color: #ffffff;
+    background-color:rgba(255, 0, 0, 0);
+    background: none
+    border: ;
+    border-color:red;
+    position: relative;
+    top: 50px;
+    border:  #ffffff ;
+ */
+
+/* }
+.this_badge:hover{
+    color: #dacc7f;
+    font-size: 17px;
+}
+ */ 
