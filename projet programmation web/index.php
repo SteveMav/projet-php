@@ -1,6 +1,4 @@
-<?php
-include("traitement_connexion.php");
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,11 +19,6 @@ include("traitement_connexion.php");
             <div class="col-md-6">
                 <div class="login-container border border-3 border-danger" style="margin-top: 140px; padding: 20px;">
                     <h2 class="text-center">CONNECTEZ VOUS A AUK PAIEMENT</h2>
-                    <?php if(!empty($message)): ?>
-                        <div class="alert alert-danger">
-                            <?= $message; ?>
-                        </div>
-                    <?php endif; ?>
                     <form action="traitement_connexion.php" method="post">
                         <div class="form-group">
                             <label for="username">email</label>
