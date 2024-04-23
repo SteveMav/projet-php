@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(!($_SESSION['id_etudiant'])){
-    header("location: index.php");
+    header("location: index.html");
 }
 ?>
 <!DOCTYPE html>
